@@ -4,98 +4,47 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Станция 1 · Бокарнея</title>
-
-<link rel="stylesheet" href="../style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
 </head>
-
-<body>
-
-<!-- СТАРТ -->
-<div id="start-screen" style="
-position:fixed;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-background:black;
-z-index:9999;
-">
-  <button onclick="startAR()" style="
-    font-size:20px;
-    padding:16px 24px;
-    border-radius:12px;
-  ">
-    📷 Запустить камеру
-  </button>
-</div>
+<body style="margin:0; overflow:hidden;">
 
 <a-scene
-  mindar-image="imageTargetSrc: ../targets.mind; autoStart: false;"
+  mindar-image="imageTargetSrc: ../targets.mind; autoStart: true; uiLoading: yes; uiScanning: yes;"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false"
 >
   <a-assets>
     <video id="plant-video"
-           src="../videos/plant1.mp4"
-           autoplay
-           playsinline
-           muted>
+      src="../videos/plant1.mp4"
+      playsinline
+      webkit-playsinline
+      muted
+      preload="auto">
     </video>
   </a-assets>
 
-  <a-camera position="0 0 0"></a-camera>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity mindar-image-target="targetIndex: 0" id="target">
-    <a-video src="#plant-video" width="1" height="0.5625"></a-video>
+    <a-video src="#plant-video" width="1" height="0.5625" position="0 0 0"></a-video>
   </a-entity>
 </a-scene>
 
 <script>
-async function startAR() {
-  const scene = document.querySelector("a-scene");
+  const target = document.querySelector('#target');
+  const video  = document.querySelector('#plant-video');
 
-  // Ждём загрузку сцены
-  if (!scene.hasLoaded) {
-    await new Promise(resolve => {
-      scene.addEventListener("loaded", resolve);
-    });
-  }
-
-  try {
-    const system = scene.systems["mindar-image-system"];
-
-    if (!system) {
-      alert("❌ MindAR не загрузился");
-      return;
-    }
-
-    await system.start();
-
-    document.getElementById("start-screen").style.display = "none";
-
-  } catch (e) {
-    console.error(e);
-    alert("❌ Ошибка AR: " + e.message);
-  }
-}
-
-// видео стартует при нахождении
-document.addEventListener("DOMContentLoaded", () => {
-  const target = document.querySelector("#target");
-  const video = document.querySelector("#plant-video");
-
-  target.addEventListener("targetFound", () => {
+  target.addEventListener('targetFound', () => {
     video.currentTime = 0;
-    video.play();
+    video.play().catch(() => {
+      video.muted = true;
+      video.play();
+    });
   });
 
-  target.addEventListener("targetLost", () => {
+  target.addEventListener('targetLost', () => {
     video.pause();
   });
-});
 </script>
-
 </body>
 </html>
