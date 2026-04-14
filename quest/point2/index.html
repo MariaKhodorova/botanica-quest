@@ -63,18 +63,15 @@
   device-orientation-permission-ui="enabled: false"
 >
   <a-assets>
-    <!-- Раскомментируй когда будет видео:
     <video id="plant-video" src="../videos/plant2.mp4"
            preload="auto" playsinline webkit-playsinline muted loop="false"></video>
-    -->
+
   </a-assets>
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
   <a-entity mindar-image-target="targetIndex: 1" id="ar-target">
-    <!-- Заглушка — зелёная плоскость; заменится видео -->
-    <a-plane color="#1b5e20" width="1" height="0.5625" position="0 0 0"></a-plane>
-    <!-- Раскомментируй вместо a-plane когда добавишь видео:
+    <!-- Заглушка — зелёная плоскость; заменится видео 
+    <a-plane color="#1b5e20" width="1" height="0.5625" position="0 0 0"></a-plane> -->
     <a-video src="#plant-video" width="1" height="0.5625" position="0 0 0"></a-video>
-    -->
   </a-entity>
 </a-scene>
 
@@ -88,7 +85,7 @@
     plantName:   'Агава американская',
     plantLatin:  'Agave americana',
     plantEmoji:  '🌵',
-    hasVideo:    false,
+    hasVideo:    true,
     correctText: '✅ Верно! Из агавы плетут верёвки и делают прочные волокна для ткани — люди используют это растение тысячи лет.',
     wrongText:   '❌ Не угадал! Из листьев агавы делают верёвки и волокна для ткани — они очень прочные.',
   });

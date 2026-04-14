@@ -63,18 +63,14 @@
   device-orientation-permission-ui="enabled: false"
 >
   <a-assets>
-    <!-- Раскомментируй когда будет видео:
     <video id="plant-video" src="../videos/plant1.mp4"
            preload="auto" playsinline webkit-playsinline muted loop="false"></video>
-    -->
   </a-assets>
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
   <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
-    <!-- Заглушка — зелёная плоскость; заменится видео -->
-    <a-plane color="#1b5e20" width="1" height="0.5625" position="0 0 0"></a-plane>
-    <!-- Раскомментируй вместо a-plane когда добавишь видео:
+    <!-- Заглушка — зелёная плоскость; заменится видео 
+    <a-plane color="#1b5e20" width="1" height="0.5625" position="0 0 0"></a-plane> -->
     <a-video src="#plant-video" width="1" height="0.5625" position="0 0 0"></a-video>
-    -->
   </a-entity>
 </a-scene>
 
@@ -88,7 +84,7 @@
     plantName:   'Бокарнея отогнутая',
     plantLatin:  'Beaucarnea recurvata',
     plantEmoji:  '🌴',
-    hasVideo:    false,
+    hasVideo:    true,
     correctText: '✅ Правильно! Толстое основание — это «бочка» с водой. Именно поэтому растение выживает в пустыне.',
     wrongText:   '❌ Не совсем! Толстое основание — это резервуар воды, который помогает пережить долгую засуху.',
   });
