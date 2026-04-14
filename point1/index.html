@@ -14,9 +14,21 @@
 
 <body>
 
-<!-- КНОПКА ЗАПУСКА -->
-<div id="start-screen" style="position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:black; z-index:9999;">
-  <button onclick="startAR()" style="font-size:20px; padding:16px 24px; border-radius:12px;">
+<!-- ЭКРАН ЗАПУСКА -->
+<div id="start-screen" style="
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:black;
+  z-index:9999;
+">
+  <button onclick="startAR()" style="
+    font-size:20px;
+    padding:16px 24px;
+    border-radius:12px;
+  ">
     📷 Запустить камеру
   </button>
 </div>
@@ -58,36 +70,39 @@
 <script>
 async function startAR() {
   try {
-    // запрос камеры ТОЛЬКО по клику
-    await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" }
-    });
-
-    // скрываем экран запуска
-    document.getElementById("start-screen").style.display = "none";
-
     const scene = document.querySelector("a-scene");
 
-    // запускаем MindAR вручную
+    // Ждём, пока MindAR инициализируется
+    if (!scene.systems["mindar-image-system"]) {
+      await new Promise(resolve => {
+        scene.addEventListener("loaded", resolve);
+      });
+    }
+
+    // Запускаем AR (камера запрашивается тут!)
     await scene.systems["mindar-image-system"].start();
 
-    // запускаем видео
-    const video = document.querySelector("#plant-video");
-    video.play();
+    // Скрываем экран запуска
+    document.getElementById("start-screen").style.display = "none";
 
   } catch (e) {
-    alert("Не удалось получить доступ к камере 😢");
+    alert("Ошибка запуска AR 😢");
     console.error(e);
   }
 }
 
-// когда таргет найден — запускаем видео (на всякий случай)
+// когда найден таргет — запускаем видео
 document.addEventListener("DOMContentLoaded", () => {
   const target = document.querySelector("#ar-target");
   const video = document.querySelector("#plant-video");
 
   target.addEventListener("targetFound", () => {
+    video.currentTime = 0;
     video.play();
+  });
+
+  target.addEventListener("targetLost", () => {
+    video.pause();
   });
 });
 </script>
