@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Станция 1 · Бокарнея</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
@@ -14,15 +12,15 @@
 
 <body>
 
-<!-- ЭКРАН ЗАПУСКА -->
+<!-- СТАРТ -->
 <div id="start-screen" style="
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:black;
-  z-index:9999;
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:black;
+z-index:9999;
 ">
   <button onclick="startAR()" style="
     font-size:20px;
@@ -33,67 +31,59 @@
   </button>
 </div>
 
-<div id="hud">
-  <div id="progress-badge">⭐ <span id="done-count">0</span> / 7</div>
-  <div id="point-badge">Станция 1 · Бокарнея</div>
-</div>
-
-<div id="hint">📷 Найди карточку с котиком и наведи камеру</div>
-
 <a-scene
-  mindar-image="imageTargetSrc: ../targets.mind; autoStart: false; uiLoading: yes; uiScanning: no; uiError: yes;"
-  color-space="sRGB"
-  renderer="colorManagement: true;"
+  mindar-image="imageTargetSrc: ../targets.mind; autoStart: false;"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false"
 >
   <a-assets>
     <video id="plant-video"
            src="../videos/plant1.mp4"
-           preload="auto"
            autoplay
            playsinline
-           webkit-playsinline
            muted>
     </video>
   </a-assets>
 
-  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+  <a-camera position="0 0 0"></a-camera>
 
-  <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
+  <a-entity mindar-image-target="targetIndex: 0" id="target">
     <a-video src="#plant-video" width="1" height="0.5625"></a-video>
   </a-entity>
 </a-scene>
 
-<script src="../quest.js"></script>
-
 <script>
 async function startAR() {
-  try {
-    const scene = document.querySelector("a-scene");
+  const scene = document.querySelector("a-scene");
 
-    // Ждём, пока MindAR инициализируется
-    if (!scene.systems["mindar-image-system"]) {
-      await new Promise(resolve => {
-        scene.addEventListener("loaded", resolve);
-      });
+  // Ждём загрузку сцены
+  if (!scene.hasLoaded) {
+    await new Promise(resolve => {
+      scene.addEventListener("loaded", resolve);
+    });
+  }
+
+  try {
+    const system = scene.systems["mindar-image-system"];
+
+    if (!system) {
+      alert("❌ MindAR не загрузился");
+      return;
     }
 
-    // Запускаем AR (камера запрашивается тут!)
-    await scene.systems["mindar-image-system"].start();
+    await system.start();
 
-    // Скрываем экран запуска
     document.getElementById("start-screen").style.display = "none";
 
   } catch (e) {
-    alert("Ошибка запуска AR 😢");
     console.error(e);
+    alert("❌ Ошибка AR: " + e.message);
   }
 }
 
-// когда найден таргет — запускаем видео
+// видео стартует при нахождении
 document.addEventListener("DOMContentLoaded", () => {
-  const target = document.querySelector("#ar-target");
+  const target = document.querySelector("#target");
   const video = document.querySelector("#plant-video");
 
   target.addEventListener("targetFound", () => {
@@ -104,21 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
   target.addEventListener("targetLost", () => {
     video.pause();
   });
-});
-</script>
-
-<script>
-initPoint({
-  pointId:     1,
-  targetIndex: 0,
-  correctAns:  1,
-  nextUrl:     '../point2/',
-  plantName:   'Бокарнея отогнутая',
-  plantLatin:  'Beaucarnea recurvata',
-  plantEmoji:  '🌴',
-  hasVideo:    true,
-  correctText: '✅ Правильно! Толстое основание — это «бочка» с водой.',
-  wrongText:   '❌ Не совсем! Это резервуар воды.',
 });
 </script>
 
