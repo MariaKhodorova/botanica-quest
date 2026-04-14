@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Станция 2 · Агава</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+
+<div id="hud">
+  <div id="progress-badge">⭐ <span id="done-count">0</span> / 7</div>
+  <div id="point-badge">Станция 2 · Агава</div>
+</div>
+
+<div id="hint">📷 Найди карточку с котиком и наведи камеру</div>
+
+<div id="placeholder">
+  <div class="ph-icon"></div>
+  <div class="ph-name"></div>
+  <div class="ph-latin"></div>
+</div>
+
+<div id="ui">
+
+  <div id="fact-panel" class="panel">
+    <div class="panel-title">Интересный факт</div>
+    <h2>Растение-ремесленник 🧵</h2>
+    <p>Из агавы делают верёвки, ткань и традиционные напитки — например, пульке. А ещё из листьев агавы добывают волокна, прочнее многих видов ниток! Само растение цветёт один раз в жизни, а потом погибает.</p>
+    <button class="btn btn-primary" onclick="showQuiz()">Ответить на вопрос ➡️</button>
+  </div>
+
+  <div id="quiz-panel" class="panel">
+    <div class="panel-title">Вопрос</div>
+    <h2>Что делают из листьев агавы?</h2>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 1)">🧵 Верёвки и прочные волокна для ткани</button>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 2)">📄 Бумагу для книг</button>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 3)">🎨 Краску для рисования</button>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 4)">💊 Лекарство от простуды</button>
+    <div id="result-msg"></div>
+  </div>
+
+  <div id="stamp-panel" class="panel">
+    <div class="dots" id="dots"></div>
+    <div class="stamp-wrap">
+      <div class="stamp-circle">🌵</div>
+      <h2>Штамп получен!</h2>
+      <p>Агава раскрыла свой секрет! Ищи следующую карточку с котиком 🐱</p>
+    </div>
+    <button class="btn btn-primary mt16" onclick="goNext()">Дальше ➡️</button>
+  </div>
+
+</div>
+
+<a-scene
+  mindar-image="imageTargetSrc: ../targets.mind; autoStart: true; uiLoading: yes; uiScanning: no; uiError: yes;"
+  color-space="sRGB"
+  renderer="colorManagement: true;"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+>
+  <a-assets>
+    <!-- Раскомментируй когда будет видео:
+    <video id="plant-video" src="../videos/plant2.mp4"
+           preload="auto" playsinline webkit-playsinline muted loop="false"></video>
+    -->
+  </a-assets>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+  <a-entity mindar-image-target="targetIndex: 1" id="ar-target">
+    <!-- Заглушка — зелёная плоскость; заменится видео -->
+    <a-plane color="#1b5e20" width="1" height="0.5625" position="0 0 0"></a-plane>
+    <!-- Раскомментируй вместо a-plane когда добавишь видео:
+    <a-video src="#plant-video" width="1" height="0.5625" position="0 0 0"></a-video>
+    -->
+  </a-entity>
+</a-scene>
+
+<script src="../quest.js"></script>
+<script>
+  initPoint({
+    pointId:     2,
+    targetIndex: 1,
+    correctAns:  1,
+    nextUrl:     '../point3/',
+    plantName:   'Агава американская',
+    plantLatin:  'Agave americana',
+    plantEmoji:  '🌵',
+    hasVideo:    false,
+    correctText: '✅ Верно! Из агавы плетут верёвки и делают прочные волокна для ткани — люди используют это растение тысячи лет.',
+    wrongText:   '❌ Не угадал! Из листьев агавы делают верёвки и волокна для ткани — они очень прочные.',
+  });
+</script>
+</body>
+</html>

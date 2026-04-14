@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AR-квест · Оранжерея</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { overflow-y: auto; background: #0d2318; }
+
+  .welcome-bg {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 32px 16px 40px;
+    background: linear-gradient(160deg, #1b3a2a 0%, #0d1f14 100%);
+  }
+
+  .logo {
+    font-size: 68px;
+    margin-bottom: 4px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  .welcome-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .welcome-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 22px;
+    padding: 22px 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .card h2 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 14px;
+  }
+
+  .rule {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .rule-icon {
+    font-size: 22px;
+    min-width: 28px;
+    text-align: center;
+    margin-top: 1px;
+  }
+
+  .rule p {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .rule strong { color: #1a1a1a; }
+
+  .plants-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .plant-chip {
+    background: #f0f7f0;
+    border-radius: 10px;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2e7d32;
+    line-height: 1.3;
+  }
+
+  .plant-chip .chip-emoji { font-size: 20px; display: block; margin-bottom: 3px; }
+
+  .btn-start {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    padding: 18px;
+    border: none;
+    border-radius: 16px;
+    background: #43a047;
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(67,160,71,0.5);
+    transition: transform 0.15s, background 0.15s;
+    margin-bottom: 16px;
+  }
+
+  .btn-start:active { transform: scale(0.97); background: #2e7d32; }
+
+  .progress-card {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .prog-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .prog-label { font-size: 13px; color: rgba(255,255,255,0.7); flex: 1; }
+  .prog-val   { font-size: 15px; color: #fff; font-weight: 800; }
+
+  .prog-bar-bg {
+    height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 20px;
+  }
+
+  .prog-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #43a047, #69f0ae);
+    border-radius: 6px;
+    transition: width 0.8s ease;
+  }
+
+  .reset-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.35);
+    font-size: 12px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    font-family: 'Nunito', sans-serif;
+    padding: 4px 8px;
+  }
+
+  .reset-btn:hover { color: rgba(255,255,255,0.6); }
+</style>
+</head>
+<body>
+<div class="welcome-bg">
+
+  <div class="logo">🌿</div>
+  <div class="welcome-title">AR-квест<br>«Мир тропиков»</div>
+  <div class="welcome-sub">Малая оранжерея · 7 станций</div>
+
+  <!-- прогресс -->
+  <div class="progress-card">
+    <div class="prog-row">
+      <span class="prog-label">Пройдено станций</span>
+      <span class="prog-val"><span id="done-num">0</span> / 7</span>
+    </div>
+    <div class="prog-bar-bg">
+      <div class="prog-bar-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- правила -->
+  <div class="card">
+    <h2>Как играть? 📖</h2>
+
+    <div class="rule">
+      <div class="rule-icon">📱</div>
+      <p><strong>Открой камеру</strong> — нажми «Начать» и разреши доступ к камере телефона.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-icon">🐱</div>
+      <p><strong>Найди карточку с котиком</strong> у каждого растения и наведи на неё камеру.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-icon">🎬</div>
+      <p><strong>Смотри видео</strong> о растении прямо в дополненной реальности!</p>
+    </div>
+    <div class="rule">
+      <div class="rule-icon">❓</div>
+      <p><strong>Отвечай на вопрос</strong> — получай штамп и двигайся к следующей станции.</p>
+    </div>
+    <div class="rule">
+      <div class="rule-icon">🏆</div>
+      <p><strong>Собери все 7 штампов</strong> и узнай свой результат на финишной точке!</p>
+    </div>
+  </div>
+
+  <!-- растения -->
+  <div class="card">
+    <h2>7 растений квеста 🌍</h2>
+    <div class="plants-grid">
+      <div class="plant-chip"><span class="chip-emoji">🌴</span>Бокарнея</div>
+      <div class="plant-chip"><span class="chip-emoji">🌵</span>Агава</div>
+      <div class="plant-chip"><span class="chip-emoji">🌵</span>Карнегия</div>
+      <div class="plant-chip"><span class="chip-emoji">🌿</span>Мюленбекия</div>
+      <div class="plant-chip"><span class="chip-emoji">🌸</span>Камелия</div>
+      <div class="plant-chip"><span class="chip-emoji">🦕</span>Гинкго</div>
+      <div class="plant-chip"><span class="chip-emoji">🌱</span>Монстера</div>
+      <div class="plant-chip" style="background:#fff3e0;color:#e65100;">⭐ Финал!</div>
+    </div>
+  </div>
+
+  <a class="btn-start" href="point1/">🌿 Начать квест!</a>
+
+  <button class="reset-btn" onclick="resetProgress()">сбросить прогресс</button>
+
+</div>
+
+<script>
+  function getProgress() {
+    try { return JSON.parse(localStorage.getItem('quest_progress') || '[]'); }
+    catch { return []; }
+  }
+
+  function updateProgress() {
+    const done = getProgress().length;
+    document.getElementById('done-num').textContent = done;
+    document.getElementById('prog-fill').style.width = (done / 7 * 100) + '%';
+  }
+
+  function resetProgress() {
+    if (confirm('Сбросить весь прогресс квеста?')) {
+      localStorage.removeItem('quest_progress');
+      updateProgress();
+    }
+  }
+
+  updateProgress();
+</script>
+</body>
+</html>

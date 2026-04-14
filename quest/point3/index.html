@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Станция 3 · Карнегия</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+
+<div id="hud">
+  <div id="progress-badge">⭐ <span id="done-count">0</span> / 7</div>
+  <div id="point-badge">Станция 3 · Карнегия</div>
+</div>
+
+<div id="hint">📷 Найди карточку с котиком и наведи камеру</div>
+
+<div id="placeholder">
+  <div class="ph-icon"></div>
+  <div class="ph-name"></div>
+  <div class="ph-latin"></div>
+</div>
+
+<div id="ui">
+
+  <div id="fact-panel" class="panel">
+    <div class="panel-title">Интересный факт</div>
+    <h2>Ночной цветок 🦇</h2>
+    <p>Карнегия — один из самых больших кактусов в мире. Его цветки раскрываются только ночью и живут всего один день. Опыляют их летучие мыши! В природе этот кактус может дожить до 150–200 лет.</p>
+    <button class="btn btn-primary" onclick="showQuiz()">Ответить на вопрос ➡️</button>
+  </div>
+
+  <div id="quiz-panel" class="panel">
+    <div class="panel-title">Вопрос</div>
+    <h2>Почему карнегия цветёт ночью?</h2>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 1)">🦇 Чтобы привлечь летучих мышей-опылителей</button>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 2)">☀️ Потому что днём слишком жарко для цветка</button>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 3)">🙈 Чтобы прятаться от людей</button>
+    <button class="btn btn-answer" onclick="checkAnswer(this, 4)">🌙 Потому что ему нравится темнота</button>
+    <div id="result-msg"></div>
+  </div>
+
+  <div id="stamp-panel" class="panel">
+    <div class="dots" id="dots"></div>
+    <div class="stamp-wrap">
+      <div class="stamp-circle">🌵</div>
+      <h2>Штамп получен!</h2>
+      <p>Тайна ночного кактуса разгадана! Ищи следующую карточку с котиком 🐱</p>
+    </div>
+    <button class="btn btn-primary mt16" onclick="goNext()">Дальше ➡️</button>
+  </div>
+
+</div>
+
+<a-scene
+  mindar-image="imageTargetSrc: ../targets.mind; autoStart: true; uiLoading: yes; uiScanning: no; uiError: yes;"
+  color-space="sRGB"
+  renderer="colorManagement: true;"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+>
+  <a-assets>
+    <!-- Раскомментируй когда будет видео:
+    <video id="plant-video" src="../videos/plant3.mp4"
+           preload="auto" playsinline webkit-playsinline muted loop="false"></video>
+    -->
+  </a-assets>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+  <a-entity mindar-image-target="targetIndex: 2" id="ar-target">
+    <!-- Заглушка — зелёная плоскость; заменится видео -->
+    <a-plane color="#1b5e20" width="1" height="0.5625" position="0 0 0"></a-plane>
+    <!-- Раскомментируй вместо a-plane когда добавишь видео:
+    <a-video src="#plant-video" width="1" height="0.5625" position="0 0 0"></a-video>
+    -->
+  </a-entity>
+</a-scene>
+
+<script src="../quest.js"></script>
+<script>
+  initPoint({
+    pointId:     3,
+    targetIndex: 2,
+    correctAns:  1,
+    nextUrl:     '../point4/',
+    plantName:   'Карнегия гигантская',
+    plantLatin:  'Carnegiea gigantea',
+    plantEmoji:  '🌵',
+    hasVideo:    false,
+    correctText: '✅ Отлично! Ночные цветки привлекают летучих мышей, которые и опыляют кактус. Природа всё продумала!',
+    wrongText:   '❌ Не совсем. Карнегия цветёт ночью, чтобы привлечь летучих мышей — именно они опыляют этот кактус!',
+  });
+</script>
+</body>
+</html>

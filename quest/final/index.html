@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Финиш · AR-квест</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>
+  body { overflow-y: auto; }
+
+  .final-bg {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+    background: linear-gradient(160deg, #1b3a2a 0%, #0d1f14 100%);
+  }
+
+  .trophy {
+    font-size: 80px;
+    animation: bounce 1s ease infinite alternate;
+    margin-bottom: 8px;
+  }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-12px); }
+  }
+
+  .final-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .final-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  .result-card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 22px;
+    padding: 22px 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
+  .score-big {
+    font-size: 64px;
+    font-weight: 900;
+    color: #43a047;
+    line-height: 1;
+    margin: 8px 0 4px;
+  }
+
+  .score-label {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 16px;
+  }
+
+  .stars {
+    font-size: 32px;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .rank-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+
+  .rank-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.55;
+  }
+
+  .stamps-grid {
+    background: rgba(255,255,255,0.97);
+    border-radius: 22px;
+    padding: 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .stamps-grid h2 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 14px;
+  }
+
+  .stamps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .stamp-item {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    gap: 3px;
+    padding: 6px 2px;
+  }
+
+  .stamp-item.earned {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .stamp-item.missed {
+    background: #f5f5f5;
+    color: #bbb;
+  }
+
+  .stamp-item .s-emoji { font-size: 24px; }
+  .stamp-item .s-name  { font-size: 10px; text-align: center; line-height: 1.2; }
+
+  .btn-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    padding: 16px;
+    border: none;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    margin-top: 4px;
+    transition: background 0.2s;
+  }
+
+  .btn-home:active { background: rgba(255,255,255,0.25); }
+
+  .congrats-msg {
+    background: rgba(255,255,255,0.97);
+    border-radius: 22px;
+    padding: 20px;
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .congrats-msg p {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+<div class="final-bg">
+
+  <div class="trophy" id="trophy">🏆</div>
+  <div class="final-title" id="final-title">Квест завершён!</div>
+  <div class="final-sub">Малая оранжерея · AR-квест</div>
+
+  <!-- главный результат -->
+  <div class="result-card">
+    <div class="score-label">Ты собрал штампов</div>
+    <div class="score-big" id="score-num">0</div>
+    <div class="score-label">из 7</div>
+    <div class="stars" id="stars">⭐⭐⭐⭐⭐</div>
+    <div class="rank-title" id="rank-title">Юный ботаник</div>
+    <div class="rank-desc" id="rank-desc">Ты познакомился с удивительными растениями нашей оранжереи!</div>
+  </div>
+
+  <!-- штампы -->
+  <div class="stamps-grid">
+    <h2>Твои штампы 🎖️</h2>
+    <div class="stamps-row" id="stamps-row"></div>
+  </div>
+
+  <!-- персональное сообщение -->
+  <div class="congrats-msg" id="congrats-msg">
+    <p id="congrats-text"></p>
+  </div>
+
+  <a class="btn-home" href="../">← На главную</a>
+
+</div>
+
+<script>
+  const PLANTS = [
+    { id: 1, emoji: '🌴', name: 'Бокарнея' },
+    { id: 2, emoji: '🌵', name: 'Агава' },
+    { id: 3, emoji: '🌵', name: 'Карнегия' },
+    { id: 4, emoji: '🌿', name: 'Мюленбекия' },
+    { id: 5, emoji: '🌸', name: 'Камелия' },
+    { id: 6, emoji: '🦕', name: 'Гинкго' },
+    { id: 7, emoji: '🌱', name: 'Монстера' },
+  ];
+
+  const RANKS = [
+    { min: 7, trophy: '🏆', title: 'Мастер оранжереи!',
+      stars: '⭐⭐⭐⭐⭐',
+      desc: 'Невероятно! Ты прошёл все 7 станций и знаешь секреты каждого растения. Ты настоящий юный ботаник!',
+      msg: 'Ты — чемпион нашего квеста! Попробуй рассказать кому-нибудь один из фактов, которые узнал сегодня 🌿' },
+    { min: 5, trophy: '🥇', title: 'Опытный исследователь',
+      stars: '⭐⭐⭐⭐',
+      desc: 'Отлично! Ты посетил большинство станций и узнал много интересного о тропических растениях.',
+      msg: 'Почти все! Загляни на оставшиеся станции — там ещё много классного 🌿' },
+    { min: 3, trophy: '🥈', title: 'Юный натуралист',
+      stars: '⭐⭐⭐',
+      desc: 'Хорошее начало! Ты познакомился с несколькими удивительными растениями нашей оранжереи.',
+      msg: 'Ещё немного — и ты соберёшь все штампы! Возвращайся и исследуй оставшиеся станции 🌱' },
+    { min: 1, trophy: '🌱', title: 'Начинающий ботаник',
+      stars: '⭐⭐',
+      desc: 'Ты сделал первый шаг в мир тропических растений. Впереди ещё много открытий!',
+      msg: 'Тебя ждут ещё 6 удивительных растений — беги к ним! 🏃' },
+    { min: 0, trophy: '🌰', title: 'Исследование только начинается',
+      stars: '⭐',
+      desc: 'Тебя ждёт целый мир тропических растений! Начни квест прямо сейчас.',
+      msg: 'Ни одного штампа? Скорее возвращайся и исследуй оранжерею! 🌿' },
+  ];
+
+  function getProgress() {
+    try { return JSON.parse(localStorage.getItem('quest_progress') || '[]'); }
+    catch { return []; }
+  }
+
+  function render() {
+    const done = getProgress();
+    const count = done.length;
+    const rank = RANKS.find(r => count >= r.min);
+
+    document.getElementById('score-num').textContent = count;
+    document.getElementById('trophy').textContent = rank.trophy;
+    document.getElementById('final-title').textContent = count === 7 ? 'Ты прошёл всё! 🎉' : 'Квест завершён!';
+    document.getElementById('stars').textContent = rank.stars;
+    document.getElementById('rank-title').textContent = rank.title;
+    document.getElementById('rank-desc').textContent = rank.desc;
+    document.getElementById('congrats-text').textContent = rank.msg;
+
+    // штампы
+    const row = document.getElementById('stamps-row');
+    PLANTS.forEach(p => {
+      const div = document.createElement('div');
+      const earned = done.includes(p.id);
+      div.className = 'stamp-item ' + (earned ? 'earned' : 'missed');
+      div.innerHTML = `<span class="s-emoji">${earned ? p.emoji : '❔'}</span><span class="s-name">${p.name}</span>`;
+      row.appendChild(div);
+    });
+
+    // финальный элемент грида (пустой)
+    const last = document.createElement('div');
+    last.className = 'stamp-item ' + (count === 7 ? 'earned' : 'missed');
+    last.innerHTML = `<span class="s-emoji">${count === 7 ? '🏆' : '❔'}</span><span class="s-name">Финиш</span>`;
+    row.appendChild(last);
+  }
+
+  render();
+</script>
+</body>
+</html>
